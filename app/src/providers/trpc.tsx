@@ -1,18 +1,9 @@
+import { trpc } from "@/utils/trpc";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { httpBatchLink } from "@trpc/client";
 import { useState } from "react";
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import HomePage from "./pages/Home";
-import { trpc } from "./utils/trpc";
 
-const router = createBrowserRouter([
-  {
-    path: "/:name?",
-    element: <HomePage />,
-  },
-]);
-
-function App() {
+export function TRPCProvider({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(() => new QueryClient());
   const [trpcClient] = useState(() =>
     trpc.createClient({
@@ -22,21 +13,16 @@ function App() {
           // You can pass any HTTP headers you wish here
           // async headers() {
           //   return {
-          //     authorization: getAuthCookie(),
+          //     authorization: getAuth(),
           //   };
           // },
         }),
       ],
     })
   );
-
   return (
     <trpc.Provider client={trpcClient} queryClient={queryClient}>
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-      </QueryClientProvider>
+      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
     </trpc.Provider>
   );
 }
-
-export default App;

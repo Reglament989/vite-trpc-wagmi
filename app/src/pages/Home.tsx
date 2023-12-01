@@ -1,5 +1,5 @@
+import { trpc } from "@/utils/trpc";
 import { useParams } from "react-router-dom";
-import { trpc } from "../utils/trpc";
 
 function HomePage() {
   const { name } = useParams();
