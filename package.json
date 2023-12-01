@@ -11,12 +11,14 @@
     "dev:server": "npm run dev -w backend",
     "dev:client": "wait-port 3000 && npm run dev -w app",
     "dev": "run-p dev:* --print-label",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "prepush": "npm run lint"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^6.10.0",
     "@typescript-eslint/parser": "^6.10.0",
     "eslint": "^8.53.0",
+    "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.4",
     "npm-run-all": "^4.1.5",
@@ -30,8 +32,7 @@
     },
     "extends": [
       "eslint:recommended",
-      "plugin:@typescript-eslint/recommended",
-      "plugin:react-hooks/recommended"
+      "plugin:@typescript-eslint/recommended-type-checked"
     ],
     "ignorePatterns": [
       "dist",
@@ -39,15 +40,20 @@
     ],
     "parser": "@typescript-eslint/parser",
     "plugins": [
-      "react-refresh"
+      "@typescript-eslint"
     ],
-    "rules": {
-      "react-refresh/only-export-components": [
-        "warn",
-        {
-          "allowConstantExport": true
-        }
+    "parserOptions": {
+      "project": [
+        "./app/tsconfig.json",
+        "./app/tsconfig.node.json",
+        "./backend/tsconfig.json"
       ]
+    },
+    "rules": {
+      "@typescript-eslint/no-unsafe-assignment": "off",
+      "@typescript-eslint/no-unsafe-call": "off",
+      "@typescript-eslint/no-unsafe-member-access": "off",
+      "@typescript-eslint/no-unsafe-return": "off"
     }
   }
 }

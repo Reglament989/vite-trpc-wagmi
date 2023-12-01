@@ -1,6 +1,6 @@
 // Export type router type signature,
 
-import { env } from "@frontend/env";
+import { env } from "@acme/frontend/src/env";
 import { createHTTPServer } from "@trpc/server/adapters/standalone";
 import cors from "cors";
 import { appRouter } from "./src/router";

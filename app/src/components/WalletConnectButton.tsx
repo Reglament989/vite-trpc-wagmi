@@ -7,7 +7,11 @@ function WalletConnectButton() {
       <ul>
         {connectors.map((connector) => (
           <li key={connector.id}>
-            <button onClick={() => connect({ connector })}>
+            <button
+              onClick={() => {
+                connect({ connector });
+              }}
+            >
               {connector.name}
             </button>
           </li>
