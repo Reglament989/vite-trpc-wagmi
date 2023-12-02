@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  node: circleci/node@5.0.2
+  node: circleci/node@5.1.0
 
 jobs:
   backend_tests:
@@ -37,7 +37,7 @@ jobs:
       - node/install-packages:
           pkg-manager: npm
       - run:
-          command: - echo "Deploy happens here, ~/project/backend/dist already exists"
+          command: echo "Deploy happens here, ~/project/backend/dist already exists"
   build_frontend:
     executor: node/default # use the default executor defined within the orb
     steps:
@@ -57,7 +57,7 @@ jobs:
       - node/install-packages:
           pkg-manager: npm
       - run:
-          command: - echo "Deploy happens here, ~/project/app/dist already exists"
+          command: echo "Deploy happens here, ~/project/app/dist already exists"
 
 workflows:
   main:
@@ -80,4 +80,4 @@ workflows:
           filters:
             branches:
               only: main # only deploy when on main
-          
+
