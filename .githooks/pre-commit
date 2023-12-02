@@ -1,0 +1,9 @@
+#!/bin/sh
+
+echo "*****Running linter******"
+
+npm run lint
+
+status=$?
+
+exit $status

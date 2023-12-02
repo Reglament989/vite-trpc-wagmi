@@ -1,13 +1,28 @@
 import { trpc } from "@/utils/trpc";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { httpBatchLink } from "@trpc/client";
+import {
+  QueryCache,
+  QueryClient,
+  QueryClientProvider,
+} from "@tanstack/react-query";
+import { httpBatchLink, loggerLink } from "@trpc/client";
 import { useState } from "react";
 
 export function TRPCProvider({ children }: { children: React.ReactNode }) {
-  const [queryClient] = useState<QueryClient>(() => new QueryClient());
+  const [queryClient] = useState<QueryClient>(
+    () =>
+      new QueryClient({
+        queryCache: new QueryCache({
+          // Global trpc error catching
+          onError() {
+            // toast.error(`Something went wrong: ${error.message}`),
+          },
+        }),
+      })
+  );
   const [trpcClient] = useState<ReturnType<typeof trpc.createClient>>(() =>
     trpc.createClient({
       links: [
+        loggerLink(),
         httpBatchLink({
           url: "http://localhost:3000" as string,
           // You can pass any HTTP headers you wish here

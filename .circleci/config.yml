@@ -1,0 +1,83 @@
+version: 2.1
+
+orbs:
+  node: circleci/node@5.0.2
+
+jobs:
+  backend_tests:
+    executor: node/default # use the default executor defined within the orb
+    steps:
+      - checkout # check out the code in the project directory
+      - node/install-packages:
+          pkg-manager: npm
+      - run:
+          name: Backend tests
+          command: npm run --prefix backend test:coverage
+      - store_test_results:
+          path: backend/reports
+      - store_artifacts: # upload test coverage as artifact
+          path: backend/coverage/cobertura-coverage.xml
+          prefix: tests
+  build_backend:
+    executor: node/default # use the default executor defined within the orb
+    steps:
+      - checkout # check out the code in the project directory
+      - node/install-packages:
+          pkg-manager: npm
+      - run:
+          command: npm run --prefix backend build
+      - persist_to_workspace:
+          root: ~/project
+          paths:
+            - backend/dist
+  deploy_backend:
+    executor: node/default # use the default executor defined within the orb
+    steps:
+      - checkout # check out the code in the project directory
+      - node/install-packages:
+          pkg-manager: npm
+      - run:
+          command: - echo "Deploy happens here, ~/project/backend/dist already exists"
+  build_frontend:
+    executor: node/default # use the default executor defined within the orb
+    steps:
+      - checkout # check out the code in the project directory
+      - node/install-packages:
+          pkg-manager: npm
+      - run:
+          command: npm run --prefix app build
+      - persist_to_workspace:
+          root: ~/project
+          paths:
+            - app/dist
+  deploy_frontend:
+    executor: node/default # use the default executor defined within the orb
+    steps:
+      - checkout # check out the code in the project directory
+      - node/install-packages:
+          pkg-manager: npm
+      - run:
+          command: - echo "Deploy happens here, ~/project/app/dist already exists"
+
+workflows:
+  main:
+    jobs:
+      - backend_tests
+      - build_backend:
+          requires:
+            - backend_tests
+      - deploy_backend:
+          requires:
+            - backend_tests
+            - build_backend
+          filters:
+            branches:
+              only: main # only deploy when on main
+      - build_frontend
+      - deploy_frontend:
+          requires:
+            - build_frontend
+          filters:
+            branches:
+              only: main # only deploy when on main
+          

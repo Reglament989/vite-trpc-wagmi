@@ -23,10 +23,6 @@ export const env = createEnv({
     VITE_WALLET_CONNECT_PROJECT_ID: z.string().min(1),
   },
 
-  /**
-   * What object holds the environment variables at runtime. This is usually
-   * `process.env` or `import.meta.env`.
-   */
   runtimeEnv: import.meta.env ?? process.env,
 
   /**

@@ -1,0 +1,79 @@
+image: node:lts
+
+workflow:
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      when: always
+    - if: $CI_COMMIT_BRANCH != $CI_DEFAULT_BRANCH
+      when: manual
+
+before_script:
+  - npm ci
+
+stages:
+  - test
+  - build
+  - deploy
+
+Backend tests:
+  script: npm run --prefix backend test:coverage
+  stage: test
+  only:
+    changes:
+      - backend/**/*
+  artifacts:
+    when: always
+    reports:
+      junit: backend/reports/rspec.xml
+      coverage_report:
+        coverage_format: cobertura
+        path: backend/coverage/cobertura-coverage.xml
+
+Build frontend:
+  stage: build
+  only:
+    changes:
+      - app/**/*
+  script:
+    - npm run --prefix app build
+  artifacts:
+    paths:
+      - app/dist
+
+Build backend:
+  stage: build
+  dependencies:
+    - Backend tests
+  only:
+    changes:
+      - backend/**/*
+  script:
+    - npm run --prefix backend build
+  artifacts:
+    paths:
+      - backend/dist
+
+Deploy backend:
+  stage: deploy
+  dependencies:
+    - Backend tests
+    - Build backend
+  only:
+    changes:
+      - backend/**/*
+  environment:
+    name: $CI_COMMIT_BRANCH
+  script:
+    - echo "Deploy happens here, backend/dist already exists"
+
+Deploy frontend:
+  stage: deploy
+  dependencies:
+    - Build frontend
+  only:
+    changes:
+      - app/**/*
+  environment:
+    name: $CI_COMMIT_BRANCH
+  script:
+    - echo "Deploy happens here, app/dist already exists"
