@@ -4,15 +4,18 @@ This template provides a advanced setup to get React + TRPC + Wagmi working in V
 
 ## Overall Project structure
 
+```
 ├── app <=== React
 │ ├── index.html
 │ ├── src
 ├── backend <=== TRPC
 │ ├── src
 ├── package.json
+```
 
 ## React structure
 
+```
 ├── App.tsx
 ├── assets
 ├── components
@@ -24,13 +27,16 @@ This template provides a advanced setup to get React + TRPC + Wagmi working in V
 │ └── wagmi.tsx
 ├── utils
 │ └── trpc.ts <=== Magic of TRPC here
+```
 
 ## TRPC structure
 
+```
 ├── index.ts
 ├── package.json
 ├── src
 │ ├── router.ts <=== "Routing table"
 │ ├── routes <=== Similar to express
+```
 
 ### Cheatsheets avaliabe under coresponding folders [app](./app/README.md) [backend](./backend/README.md)
