@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "tsc && esbuild index.ts --bundle --platform=node --outfile=dist/index.js --target=es2020",
+    "build": "tsc --noEmit && esbuild index.ts --bundle --platform=node --outfile=dist/index.js --target=es2020",
     "dev": "tsx watch index.ts",
     "start": "node dist/index.js",
     "test": "vitest",
